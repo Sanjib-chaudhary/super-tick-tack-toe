@@ -1,0 +1,12 @@
+.cell{
+	border: none;
+	font-size: 40px;
+	padding: 5px;
+	height: 50px;
+	width: 50px;
+}
+
+.big-table{
+	border-spacing: 5px;
+	padding-left: 0px;
+}
