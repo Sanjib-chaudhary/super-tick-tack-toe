@@ -10,3 +10,17 @@
 	border-spacing: 5px;
 	padding-left: 0px;
 }
+
+.not-playable button{
+	background: red;
+}
+
+.playable button{
+	background: #7CFC00	;
+}
+
+table {
+    display: table;
+    border-collapse: separate;
+    border-color: black;
+}
