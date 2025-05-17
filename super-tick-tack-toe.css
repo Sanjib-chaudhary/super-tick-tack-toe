@@ -19,8 +19,9 @@
 	background: #7CFC00	;
 }
 
-table {
-    display: table;
-    border-collapse: separate;
-    border-color: black;
+.resolved{
+	font-size: 100px;
+	font-weight: bold;
+	text-align: center;
 }
+
