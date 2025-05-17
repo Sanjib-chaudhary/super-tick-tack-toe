@@ -9,6 +9,15 @@
 .big-table{
 	border-spacing: 5px;
 	padding-left: 0px;
+	table-layout: fixed;
+	height : 490px;
+	width: 490px;
+}
+
+.js-big-cell{
+	height: 160px;
+	width: 160px;
+
 }
 
 .not-playable button{
@@ -17,11 +26,14 @@
 
 .playable button{
 	background: #7CFC00	;
+	cursor: pointer;
 }
 
 .resolved{
-	font-size: 100px;
+	overflow: hidden;
+	font-size: 90px;
 	font-weight: bold;
 	text-align: center;
 }
+
 

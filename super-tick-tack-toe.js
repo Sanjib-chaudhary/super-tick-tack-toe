@@ -1,34 +1,38 @@
 //bigCell is the small tick-tack-toe 
 //smallCell are the place where we put move (X , O)
 
-const bigCellElement = document.querySelectorAll('.js-big-cell'); //all those "td" of big table
-const smallCellElement = document.querySelectorAll('.js-small-cell'); // all the small cell 
 let move = 'X';
 let player = 'Player' + move; //current player
+let gameGoing = 1;
+const bigCellElement = document.querySelectorAll('.js-big-cell'); //all those "td" of big table
+const smallCellElement = document.querySelectorAll('.js-small-cell'); // all the small cell 
+
+let smallResult = []; 
+
+smallResult = createEmptyArray(smallResult); //array of all the results of small games initialized at '' at first
+console.log(smallResult);
+
 
 bigCellElement.forEach((bigCell) => { 
 	bigCell.classList.add('playable'); //makes all the bigCell playable at start
 });
 
-
-
 document.querySelector('.js-player') //shows current player
 	.innerHTML = player;
-
 
 smallCellElement.forEach((smallCell) => {
 	smallCell.addEventListener('click', () => {
 		
-		containerId = smallCell.dataset.bigRow + smallCell.dataset.bigColumn;  //gets the Id of the container which contains the clicked smallCell
-		containerElement = document.querySelector(`.js-big-cell-${containerId}`); //gets the whole element of the container
+		const containerId = smallCell.dataset.bigRow + smallCell.dataset.bigColumn;  //gets the Id of the container which contains the clicked smallCell
+		const containerElement = document.querySelector(`.js-big-cell-${containerId}`); //gets the whole element of the container
 		
 		if(containerElement.classList.contains('playable')){ //checks if the small tick-tack-toe(container) is playable
 			
-			chooseMove(smallCell);
+			const bigCellId = chooseMove(smallCell);
 			
-			const contentArray = createCellContentArray(containerElement)
-			let smallCellResult = result(contentArray); //check result the smallCell where the move was just made
-			console.log(smallCellResult);
+			const contentArray = createCellContentArray(containerElement);
+			console.log(contentArray);
+			const smallCellResult = result(contentArray); //check result for the smallCell where the move was just made
 			
 			if(smallCellResult){
 				if(smallCellResult === 'PlayerX wins'){
@@ -40,11 +44,19 @@ smallCellElement.forEach((smallCell) => {
 				} else{
 					containerElement.innerHTML = 'TIE';
 				}
-				
 				containerElement.classList.add('not-playable');
 				containerElement.classList.add('resolved');
 				containerElement.classList.remove('playable');
 				playableTable(bigCellId);
+				
+				const row = Number(smallCell.dataset.bigRow);
+				const column = Number(smallCell.dataset.bigColumn);
+				
+				smallResult[row][column] = containerElement.innerHTML; 				 //stores the results of all mini game on array based on their container location/Id
+				console.log(smallResult);
+				
+				const gameResult = result(smallResult);
+				console.log(gameResult);
 			}
 		}
 
@@ -57,7 +69,6 @@ smallCellElement.forEach((smallCell) => {
 
 
 function chooseMove(smallCell){
-	// console.log(!smallCell.innerHTML)
 	if(!smallCell.innerHTML){ //if cell empty 
 		smallCell.innerHTML = `${move}`;
 		if( move === 'X'){
@@ -67,11 +78,12 @@ function chooseMove(smallCell){
 		}
 		player = 'Player' + move;
 
-		smallCellId = smallCell.dataset.smallRow + smallCell.dataset.smallColumn;
-		bigCellId = smallCellId;  //choose small tick-tack-toe based on the move 
+		const smallCellId = smallCell.dataset.smallRow + smallCell.dataset.smallColumn;
+		const bigCellId = smallCellId;  //choose small tick-tack-toe based on the move 
 		playableTable(bigCellId);
+		
+		return bigCellId;
 	}
-
 }
 
 function playableTable(bigCellId){	//adds playable and non-playable to the necessary small tick-tack-toe
@@ -149,27 +161,26 @@ function result(cell){
 
 function createCellContentArray(containerElement){	//puts the content of cell in 2D Array for the small tick-tack-toe
 	let cellElement;
-	const cellContent = [];
+	let cellContent = [];
 	let row = [];
+	
+	cellContent = createEmptyArray(cellContent);
 	
 	for(let i = 0; i < 3; i++){
 		for(let j = 0; j < 3; j++){
 			cellElement = containerElement.querySelector(`.js-${i}${j}`); //selects specific the button on the container based on the cell Id
-			row.push(cellElement.innerHTML); //pushes 3 contents to make the row
+			cellContent[i][j] = cellElement.innerHTML;
 		}
-		cellContent.push(row); //pushes the row
-		row = []; //empty the row for new row
 	}
 	return cellContent;
 }
 
-// also make sure the result is returned for the TIEs in / \ - | line 
-//reuse the tick-tack-toe code as much as possible and viable
-
-
-
-
-
-
-
-
+function createEmptyArray(array){
+	for(let i = 0; i < 3; i++){
+		array[i] = [];
+		for(let j = 0; j < 3; j++){
+			array[i][j] = '';
+		}
+	}
+	return array;
+}
