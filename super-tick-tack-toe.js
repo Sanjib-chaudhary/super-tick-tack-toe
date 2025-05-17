@@ -10,8 +10,6 @@ const smallCellElement = document.querySelectorAll('.js-small-cell'); // all the
 let smallResult = []; 
 
 smallResult = createEmptyArray(smallResult); //array of all the results of small games initialized at '' at first
-console.log(smallResult);
-
 
 bigCellElement.forEach((bigCell) => { 
 	bigCell.classList.add('playable'); //makes all the bigCell playable at start
@@ -26,12 +24,11 @@ smallCellElement.forEach((smallCell) => {
 		const containerId = smallCell.dataset.bigRow + smallCell.dataset.bigColumn;  //gets the Id of the container which contains the clicked smallCell
 		const containerElement = document.querySelector(`.js-big-cell-${containerId}`); //gets the whole element of the container
 		
-		if(containerElement.classList.contains('playable')){ //checks if the small tick-tack-toe(container) is playable
+		if(containerElement.classList.contains('playable') && gameGoing){ //checks if the small tick-tack-toe(container) is playable
 			
 			const bigCellId = chooseMove(smallCell);
 			
 			const contentArray = createCellContentArray(containerElement);
-			console.log(contentArray);
 			const smallCellResult = result(contentArray); //check result for the smallCell where the move was just made
 			
 			if(smallCellResult){
@@ -53,10 +50,20 @@ smallCellElement.forEach((smallCell) => {
 				const column = Number(smallCell.dataset.bigColumn);
 				
 				smallResult[row][column] = containerElement.innerHTML; 				 //stores the results of all mini game on array based on their container location/Id
-				console.log(smallResult);
 				
 				const gameResult = result(smallResult);
-				console.log(gameResult);
+				if(gameResult){
+					document.querySelector('.js-result').innerHTML = `Result: ${gameResult}`;
+					gameGoing = 0;
+					
+					//makes all the remaning unfinished small game red
+					bigCellElement.forEach((bigCell) => { 
+						if(!bigCell.classList.contains('resolved')){ //if the small game is not finished then add non-playable to make it red
+							bigCell.classList.remove('playable')
+							bigCell.classList.add('not-playable'); //makes all the bigCell playable at start 
+						}
+					});
+				}
 			}
 		}
 
