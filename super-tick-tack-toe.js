@@ -169,7 +169,6 @@ function result(cell){
 function createCellContentArray(containerElement){	//puts the content of cell in 2D Array for the small tick-tack-toe
 	let cellElement;
 	let cellContent = [];
-	let row = [];
 	
 	cellContent = createEmptyArray(cellContent);
 	
