@@ -1,41 +1,41 @@
-//bigCell is the small tick-tack-toe 
-//smallCell are the place where we put move (X , O)
+//smallTable is the small tick-tack-toe 
+//cell are the place where we put move (X , O)
 
 let move = 'X';
 let player = 'Player' + move; //current player
 let gameGoing = 1;
-const bigCellElement = document.querySelectorAll('.js-big-cell'); //all those "td" of big table
-const smallCellElement = document.querySelectorAll('.js-small-cell'); // all the small cell 
+const smallTableElement = document.querySelectorAll('.js-small-table'); //all those small table
+const cellElement = document.querySelectorAll('.js-cell'); // all the  cell 
 
 let smallResult = []; 
 
 smallResult = createEmptyArray(smallResult); //array of all the results of small games initialized at '' at first
 
-bigCellElement.forEach((bigCell) => { 
-	bigCell.classList.add('playable'); //makes all the bigCell playable at start
+smallTableElement.forEach((smallTable) => { 
+	smallTable.classList.add('playable'); //makes all the smallTable playable at start
 });
 
 document.querySelector('.js-player') //shows current player
 	.innerHTML = player;
 
-smallCellElement.forEach((smallCell) => {
-	smallCell.addEventListener('click', () => {
+cellElement.forEach((cell) => {
+	cell.addEventListener('click', () => {
 		
-		const containerId = smallCell.dataset.bigRow + smallCell.dataset.bigColumn;  //gets the Id of the container which contains the clicked smallCell
-		const containerElement = document.querySelector(`.js-big-cell-${containerId}`); //gets the whole element of the container
-		
+		const containerElement = cell.parentElement; //gets the container element
+		const containerId = containerElement.dataset.smallTableId;  //gets the Id of the container which contains the clicked cell
+	
 		if(containerElement.classList.contains('playable') && gameGoing){ //checks if the small tick-tack-toe(container) is playable
 			
-			const bigCellId = chooseMove(smallCell);
+			const smallTableId = chooseMove(cell);
 			
 			const contentArray = createCellContentArray(containerElement);
-			const smallCellResult = result(contentArray); //check result for the smallCell where the move was just made
+			const cellResult = result(contentArray); //check result for the cell where the move was just made
 			
-			if(smallCellResult){
-				if(smallCellResult === 'PlayerX wins'){
+			if(cellResult){
+				if(cellResult === 'PlayerX wins'){
 					containerElement.innerHTML = 'X';
 				
-				} else if(smallCellResult === 'PlayerO wins'){
+				} else if(cellResult === 'PlayerO wins'){
 					containerElement.innerHTML = 'O';
 				
 				} else{
@@ -44,10 +44,10 @@ smallCellElement.forEach((smallCell) => {
 				containerElement.classList.add('not-playable');
 				containerElement.classList.add('resolved');
 				containerElement.classList.remove('playable');
-				playableTable(bigCellId);
+				playableTable(smallTableId);
 				
-				const row = Number(smallCell.dataset.bigRow);
-				const column = Number(smallCell.dataset.bigColumn);
+				const row = Number(containerElement.dataset.bigRow);
+				const column = Number(containerElement.dataset.bigColumn);
 				
 				smallResult[row][column] = containerElement.innerHTML; 				 //stores the results of all mini game on array based on their container location/Id
 				
@@ -57,10 +57,10 @@ smallCellElement.forEach((smallCell) => {
 					gameGoing = 0;
 					
 					//makes all the remaning unfinished small game red
-					bigCellElement.forEach((bigCell) => { 
-						if(!bigCell.classList.contains('resolved')){ //if the small game is not finished then add non-playable to make it red
-							bigCell.classList.remove('playable')
-							bigCell.classList.add('not-playable'); //makes all the bigCell playable at start 
+					smallTableElement.forEach((smallTable) => { 
+						if(!smallTable.classList.contains('resolved')){ //if the small game is not finished then add non-playable to make it red
+							smallTable.classList.remove('playable')
+							smallTable.classList.add('not-playable'); //makes all the smallTable playable at start 
 						}
 					});
 				}
@@ -75,41 +75,40 @@ smallCellElement.forEach((smallCell) => {
 });
 
 
-function chooseMove(smallCell){
-	if(!smallCell.innerHTML){ //if cell empty 
-		smallCell.innerHTML = `${move}`;
+function chooseMove(cell){
+	if(!cell.innerHTML){ //if cell empty 
+		cell.innerHTML = `${move}`;
 		if( move === 'X'){
 			move = 'O';
 		} else if(move === 'O'){
 			move = 'X';
 		}
 		player = 'Player' + move;
-
-		const smallCellId = smallCell.dataset.smallRow + smallCell.dataset.smallColumn;
-		const bigCellId = smallCellId;  //choose small tick-tack-toe based on the move 
-		playableTable(bigCellId);
 		
-		return bigCellId;
+		const cellId = cell.dataset.cellId;
+		const smallTableId = cellId;  //choose small tick-tack-toe based on the move 
+		playableTable(smallTableId);
+		return smallTableId;
 	}
 }
 
-function playableTable(bigCellId){	//adds playable and non-playable to the necessary small tick-tack-toe
-
-	bigCellElement.forEach((bigCell) => {
-		const cellId = bigCell.dataset.bigCellId;
-		if(cellId !== bigCellId){ //removes the existing 'playable' class and adds 'non-playable' class if the small tick-tack-toe is playable
-			bigCell.classList.remove('playable'); 
-			bigCell.classList.add('not-playable');
+function playableTable(smallTableId){	//adds playable and non-playable to the necessary small tick-tack-toe
+	smallTableElement.forEach((smallTable) => {	
+		const cellId = smallTable.dataset.smallTableId;
+	
+		if(cellId !== smallTableId){ //removes the existing 'playable' class and adds 'non-playable' class if the small tick-tack-toe is playable
+			smallTable.classList.remove('playable'); 
+			smallTable.classList.add('not-playable');
 		
 		} else{
-			bigCell.classList.remove('not-playable');
-			bigCell.classList.add('playable');
+			smallTable.classList.remove('not-playable');
+			smallTable.classList.add('playable');
 		}
 	});
 	
-	if(document.querySelector(`.js-big-cell-${bigCellId}`).classList.contains('resolved')){ //checks if the tick-tack-toe is already resolved i.e can't be played any more
-		bigCellElement.forEach((bigCell) => { 
-			bigCell.classList.add('playable'); //makes all the bigCell playable at start 
+	if(document.querySelector(`.js-small-table-${smallTableId}`).classList.contains('resolved')){ //checks if the tick-tack-toe is already resolved i.e can't be played any more
+		smallTableElement.forEach((smallTable) => { 
+			smallTable.classList.add('playable'); //makes all the smallTable playable at start 
 		});
 	}
 }

@@ -4,41 +4,57 @@ body{
 }
 
 .cell{
-	border: none;
+	border: 4px solid #8303FF;
 	font-size: 40px;
 	padding: 5px;
-	height: 50px;
-	width: 50px;
+	height: 57px;
+	width: 57px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	
+}
+
+.small-table{
+	border: 6px solid #00FFFF;
+	height: 214.5px;
+	width: 214.5px;
+	display: grid;
+	grid-template-columns: auto auto auto;
 }
 
 .big-table{
-	border-spacing: 5px;
-	padding-left: 0px;
-	table-layout: fixed;
-	height : 490px;
-	width: 490px;
+	
+	height: 656px;
+	width: 656px;
+	display: grid;
+	grid-template-columns: auto auto auto;
 }
 
-.big-cell{
-	height: 160px;
-	width: 160px;
-
-}
-
-.not-playable button{
+.not-playable .cell{
 	background: red;
 }
 
-.playable button{
-	background: #7CFC00	;
+.playable .cell{
+	background: #32CD32;
 	cursor: pointer;
 }
 
 .resolved{
-	overflow: hidden;
 	font-size: 90px;
 	font-weight: bold;
-	text-align: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
+.cell:nth-child(-n+3) { border-top: none; }
+.cell:nth-child(3n+1) { border-left: none; }
+.cell:nth-child(3n) { border-right: none; }
+.cell:nth-child(n+7) { border-bottom: none; }
+
+.small-table:nth-child(-n+3) { border-top: none; }
+.small-table:nth-child(3n+1) { border-left: none; }
+.small-table:nth-child(3n) { border-right: none; }
+.small-table:nth-child(n+7) { border-bottom: none; }
 
