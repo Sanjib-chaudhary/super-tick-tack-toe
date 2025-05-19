@@ -3,12 +3,19 @@ body{
 	color: white;
 }
 
+.player, .result{
+	display: flex;
+	justify-content: center;
+	margin: 5px;
+
+}
+
 .cell{
-	border: 4px solid #8303FF;
+	border: 4px solid #00FFFF;
 	font-size: 40px;
 	padding: 5px;
 	height: 57px;
-	width: 57px;
+	aspect-ratio: 1 / 1; 
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -16,27 +23,28 @@ body{
 }
 
 .small-table{
-	border: 6px solid #00FFFF;
+	border: 6px solid #1A1A1A	;
 	height: 214.5px;
-	width: 214.5px;
+	aspect-ratio: 1 / 1; 
 	display: grid;
 	grid-template-columns: auto auto auto;
 }
 
 .big-table{
-	
 	height: 656px;
-	width: 656px;
+	aspect-ratio: 1 / 1; 
 	display: grid;
 	grid-template-columns: auto auto auto;
+	margin: 0px auto;
+	transform: scale(0.8);
 }
 
 .not-playable .cell{
-	background: red;
+	background: #333333	;
 }
 
 .playable .cell{
-	background: #32CD32;
+	background: gray;
 	cursor: pointer;
 }
 
@@ -58,3 +66,10 @@ body{
 .small-table:nth-child(3n) { border-right: none; }
 .small-table:nth-child(n+7) { border-bottom: none; }
 
+.predict-move{
+	color: rgba(0, 0, 0, 0.5);
+}
+
+.predict-small-table .cell{
+	background: #555555;
+}

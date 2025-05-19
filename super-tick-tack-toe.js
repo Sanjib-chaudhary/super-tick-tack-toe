@@ -19,12 +19,23 @@ document.querySelector('.js-player') //shows current player
 	.innerHTML = player;
 
 cellElement.forEach((cell) => {
+	
+	const containerElement = cell.parentElement; //gets the container element
+	const containerId = containerElement.dataset.smallTableId;  //gets the Id of the container which contains the clicked cell
+	
+	cell.addEventListener('mouseover', () => {
+		predictMove(cell, containerElement);
+	});
+	
+	cell.addEventListener('mouseout', () => {
+		stopPredictingMove(cell);
+	});
+
 	cell.addEventListener('click', () => {
 		
-		const containerElement = cell.parentElement; //gets the container element
-		const containerId = containerElement.dataset.smallTableId;  //gets the Id of the container which contains the clicked cell
-	
-		if(containerElement.classList.contains('playable') && gameGoing){ //checks if the small tick-tack-toe(container) is playable
+		stopPredictingMove(cell);
+		
+		if(containerElement.classList.contains('playable') && gameGoing){			//checks if the small tick-tack-toe(container) is playable	
 			
 			const smallTableId = chooseMove(cell);
 			
@@ -188,4 +199,34 @@ function createEmptyArray(array){
 		}
 	}
 	return array;
+}
+
+function stopPredictingMove(cell){
+	if(cell.classList.contains('predict-move')){
+		cell.innerHTML = ``;
+		cell.classList.remove('predict-move');
+		const cellId = cell.dataset.cellId;
+		document.querySelector(`.js-small-table-${cellId}`).classList.remove('predict-small-table');
+	
+		// if(document.querySelector(`.js-small-table-${cellId}`).classList.contains('resolved')){ //checks if the tick-tack-toe is already resolved i.e can't be played any more
+			// smallTableElement.forEach((smallTable) => { 
+				// smallTable.classList.add('predict-small-table'); //shows all the smallTable playable at start 
+			// });
+		// }
+	}
+}
+
+function predictMove(cell, containerElement){
+	if(containerElement.classList.contains('playable') && !cell.innerHTML){
+		cell.innerHTML = `${move}`;
+		cell.classList.add('predict-move');
+		const cellId = cell.dataset.cellId;
+		document.querySelector(`.js-small-table-${cellId}`).classList.add('predict-small-table');
+		
+		// if(document.querySelector(`.js-small-table-${cellId}`).classList.contains('resolved')){ //checks if the tick-tack-toe is already resolved i.e can't be played any more
+		// smallTableElement.forEach((smallTable) => { 
+			// smallTable.classList.remove('predict-small-table'); //shows all the smallTable playable at start 
+		// });
+		// }
+	}
 }
